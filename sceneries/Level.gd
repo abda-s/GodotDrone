@@ -58,12 +58,8 @@ func get_cameras(node: Node) -> Array:
 func change_camera() -> void:
 	camera.visible = false
 	camera.current = false
-	if camera is FPVCamera and Graphics.graphics_settings["fisheye_mode"] != Graphics.FisheyeMode.OFF:
-		camera.render_quad.visible = false
 	camera = cameras[camera_index]
 	camera.current = true
-	if camera is FPVCamera and Graphics.graphics_settings["fisheye_mode"] != Graphics.FisheyeMode.OFF:
-		camera.render_quad.visible = true
 	camera.visible = true
 
 	if camera is FPVCamera:

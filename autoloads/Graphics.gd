@@ -25,7 +25,7 @@ var graphics_settings := {
 	"msaa": GameMSAA.X4,
 	"af": GameAF.X4,
 	"shadows": Shadows.MEDIUM,
-	"fisheye_mode": FisheyeMode.FULL,
+	"fisheye_mode": FisheyeMode.OFF,
 	"fisheye_resolution": FisheyeResolution.FISHEYE_720P,
 	"fisheye_msaa": FisheyeMSAA.SAME_AS_GAME,
 }
