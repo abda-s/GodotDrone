@@ -12,18 +12,18 @@ enum Controller {YAW, ROLL, PITCH, YAW_SPEED, ROLL_SPEED, PITCH_SPEED,
 		LAUNCH}
 enum ArmFail {THROTTLE_HIGH, CRASH_RECOVERY_MODE}
 
-var pid_roll_p := 50.0
-var pid_roll_i := 30.0
-var pid_roll_d := 30.0
-var pid_pitch_p := 50.0
-var pid_pitch_i := 30.0
-var pid_pitch_d := 30.0
-var pid_yaw_p := 70.0
-var pid_yaw_i := 90.0
-var pid_yaw_d := 40.0
+var pid_roll_p := 5.0
+var pid_roll_i := 3.0
+var pid_roll_d := 3.0
+var pid_pitch_p := 5.0
+var pid_pitch_i := 3.0
+var pid_pitch_d := 3.0
+var pid_yaw_p := 8.0
+var pid_yaw_i := 5.0
+var pid_yaw_d := 0.0
 
 var debug_geometry_enabled := false
-var telemetry_enabled := false
+var telemetry_enabled := true
 
 var time := 0.0
 var dt := 0.0
@@ -129,13 +129,13 @@ func setup_pids() -> void:
 
 	pid_controllers[Controller.YAW_SPEED].set_coefficients(
 			pid_scale_p * pid_yaw_p, pid_scale_i * pid_yaw_i, pid_scale_d * pid_yaw_d)
-	pid_controllers[Controller.YAW_SPEED].set_clamp_limits(-0.25, 0.25)
+	pid_controllers[Controller.YAW_SPEED].set_clamp_limits(-0.5, 0.5)
 	pid_controllers[Controller.ROLL_SPEED].set_coefficients(
 			pid_scale_p * pid_roll_p, pid_scale_i * pid_roll_i, pid_scale_d * pid_roll_d)
-	pid_controllers[Controller.ROLL_SPEED].set_clamp_limits(-0.25, 0.25)
+	pid_controllers[Controller.ROLL_SPEED].set_clamp_limits(-0.5, 0.5)
 	pid_controllers[Controller.PITCH_SPEED].set_coefficients(
 			pid_scale_p * pid_pitch_p, pid_scale_i * pid_pitch_i, pid_scale_d * pid_pitch_d)
-	pid_controllers[Controller.PITCH_SPEED].set_clamp_limits(-0.25, 0.25)
+	pid_controllers[Controller.PITCH_SPEED].set_clamp_limits(-0.5, 0.5)
 
 	pid_controllers[Controller.POS_X].set_coefficients(0.5, 0.05, 0.3)
 	pid_controllers[Controller.POS_X].set_clamp_limits(-0.5, 0.5)
@@ -325,10 +325,10 @@ func write_telemetry() -> void:
 			delta_pos.x,
 			delta_pos.y,
 			delta_pos.z,
-			motors[0].get_rpm(),
-			motors[1].get_rpm(),
-			motors[2].get_rpm(),
-			motors[3].get_rpm(),
+			motors[0].rpm,
+			motors[1].rpm,
+			motors[2].rpm,
+			motors[3].rpm,
 			motors[0].propeller.forces[0].length(),
 			motors[1].propeller.forces[0].length(),
 			motors[2].propeller.forces[0].length(),
@@ -470,24 +470,10 @@ func update_control(delta: float) -> void:
 			power - yaw + roll - pitch,
 	]
 
-	# Air Mode
-	var pwm_min := motor_pwm.min() as float
-	var pwm_max := motor_pwm.max() as float
+	# Air Mode: clip each motor to [idle, 1] independently instead of scaling+offset
 	var idle_pwm := motors[0].MIN_POWER / 100.0 as float
-	# Scale PWM to range [idle, 1] as needed
-	if pwm_max - pwm_min > 1 - idle_pwm:
-		var pwm_mid := (pwm_min + pwm_max) / 2.0
-		for i in range(4):
-			motor_pwm[i] = pwm_mid + (motor_pwm[i] - pwm_mid) * (1 - idle_pwm) / (pwm_max - pwm_min)
-	pwm_min = motor_pwm.min()
-	pwm_max = motor_pwm.max()
-	var offset := 0.0
-	if pwm_min < idle_pwm:
-		offset = idle_pwm - pwm_min
-	if pwm_max > 1:
-		offset = 1 - pwm_max
 	for i in range(4):
-		motor_pwm[i] += offset
+		motor_pwm[i] = clampf(motor_pwm[i], idle_pwm, 1.0)
 
 	if flight_mode is FlightModeTurtle:
 		motor_pwm = [0.0, 0.0, 0.0, 0.0]

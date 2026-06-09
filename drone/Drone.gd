@@ -133,8 +133,10 @@ func _physics_process(_delta: float) -> void:
 		DebugGeometry.draw_debug_arrow(0.0, drone_pos, drag.normalized(), drag.length() / 10)
 
 
+
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
-	var steps := 10
+
+	var steps := 3
 	if not flight_controller.state_armed:
 		steps = 1
 	var dt := state.step / (steps as float)
@@ -186,7 +188,10 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		lin_vel += a * dt
 		pos += lin_vel * dt
 
-		var ang_a := vec_torque * state.inverse_inertia
+		# Override: collision shapes produce ~300x too much inertia
+		const INV_INERTIA := Vector3(200.0, 200.0, 125.0)
+		var ang_a_local := (bas.transposed() * vec_torque) * INV_INERTIA
+		var ang_a := bas * ang_a_local
 		ang_vel += ang_a * dt
 		var delta_ang_vel := ang_vel * dt
 		if delta_ang_vel != Vector3.ZERO:

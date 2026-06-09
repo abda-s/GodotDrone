@@ -24,8 +24,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.015, 0.045)
 
 [node name="Motor1" parent="." instance=ExtResource("7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0, -0.08)
-MAX_RPM = 30000.0
-RPM_ACCELERATION = 150000.0
+MAX_TORQUE = 8000.0
+MAX_RPM = 45000.0
+RPM_ACCELERATION = 500000.0
 MIN_POWER = 2
 kv = 2400
 
@@ -35,8 +36,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0095, 0)
 [node name="Motor2" parent="." instance=ExtResource("7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0, -0.08)
 clockwise = false
-MAX_RPM = 30000.0
-RPM_ACCELERATION = 150000.0
+MAX_TORQUE = 8000.0
+MAX_RPM = 45000.0
+RPM_ACCELERATION = 500000.0
 MIN_POWER = 2
 kv = 2400
 
@@ -45,8 +47,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0095, 0)
 
 [node name="Motor3" parent="." instance=ExtResource("7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0, 0.08)
-MAX_RPM = 30000.0
-RPM_ACCELERATION = 150000.0
+MAX_TORQUE = 8000.0
+MAX_RPM = 45000.0
+RPM_ACCELERATION = 500000.0
 MIN_POWER = 2
 kv = 2400
 
@@ -56,8 +59,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0095, 0)
 [node name="Motor4" parent="." instance=ExtResource("7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0, 0.08)
 clockwise = false
-MAX_RPM = 30000.0
-RPM_ACCELERATION = 150000.0
+MAX_TORQUE = 8000.0
+MAX_RPM = 45000.0
+RPM_ACCELERATION = 500000.0
 MIN_POWER = 2
 kv = 2400
 

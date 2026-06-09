@@ -109,14 +109,7 @@ func update_data(dt: float, pos: Vector3, angles: Vector3, velocity: Vector3,
 
 
 func update_flight_mode(mode: FlightMode) -> void:
-	var text := ""
-	if mode is FlightModeHorizon:
-		text = "HORIZON"
-	elif mode is FlightModeSpeed:
-		text = "SPEED"
-	elif mode is FlightModeTrack:
-		text = "POSITION"
-	flight_mode.text = text
+	flight_mode.text = str(mode)
 
 
 func reset_data() -> void:
