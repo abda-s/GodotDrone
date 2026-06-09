@@ -10,6 +10,15 @@ extends Node3D
 @onready var ray := $RayCast3D as RayCast3D
 var max_ray_length := 0.0
 
+static func _get_shader_material(mesh: MeshInstance3D) -> ShaderMaterial:
+	var mat := mesh.mesh.surface_get_material(0)
+	if mat is ShaderMaterial:
+		return mat
+	var shader_mat := ShaderMaterial.new()
+	shader_mat.shader = preload("res://drone/parts/propellers/PropellerShader.tres")
+	mesh.mesh.surface_set_material(0, shader_mat)
+	return shader_mat
+
 @export_range (0.5, 15) var diameter := 5.0
 @export_range (0.5, 15) var pitch := 5.0
 @export_range (2, 6) var num_blades := 2
@@ -33,27 +42,27 @@ var use_blur := false
 		if !is_inside_tree():
 			await self.ready
 		color = col
-		cw.mesh.surface_get_material(0).set_shader_parameter("propeller_color", color)
-		ccw.mesh.surface_get_material(0).set_shader_parameter("propeller_color", color)
-		prop_disk.mesh.surface_get_material(0).set_shader_parameter("propeller_color", color)
+		_get_shader_material(cw).set_shader_parameter("propeller_color", color)
+		_get_shader_material(ccw).set_shader_parameter("propeller_color", color)
+		_get_shader_material(prop_disk).set_shader_parameter("propeller_color", color)
 @export_range (1, 3) var prop_disk_alpha := 1.0 :
 	set(alpha):
 		if !is_inside_tree():
 			await self.ready
 		prop_disk_alpha = alpha
-		prop_disk.mesh.surface_get_material(0).set_shader_parameter("alpha_boost", prop_disk_alpha)
+		_get_shader_material(prop_disk).set_shader_parameter("alpha_boost", prop_disk_alpha)
 @export_range (0, 2) var prop_disk_emission := 0.0 :
 	set(emission):
 		if !is_inside_tree():
 			await self.ready
 		prop_disk_emission = emission
-		prop_disk.mesh.surface_get_material(0).set_shader_parameter("emission_power", prop_disk_emission)
+		_get_shader_material(prop_disk).set_shader_parameter("emission_power", prop_disk_emission)
 @export_range (1, 20) var prop_disk_falloff := 10 :
 	set(falloff):
 		if !is_inside_tree():
 			await self.ready
 		prop_disk_falloff = falloff
-		prop_disk.mesh.surface_get_material(0).set_shader_parameter("emission_falloff", prop_disk_falloff)
+		_get_shader_material(prop_disk).set_shader_parameter("emission_falloff", prop_disk_falloff)
 
 var velocity := Vector3.ZERO
 var forces: Array[Vector3] = [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]

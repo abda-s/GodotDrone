@@ -14,8 +14,29 @@ var mode: int = Mode.MODE_2
 @onready var skeleton := $RadioTransmitter/Armature/Skeleton3D as Skeleton3D
 var accept_input := true
 
+# --- Raw axis values (for debug HUD) ---
+var axis_0: float = 0.0
+var axis_1: float = 0.0
+var axis_2: float = 0.0
+var axis_3: float = 0.0
+var last_button: int = -1
+# --- STARTRC Axis Mapping ---
+# Axis 0 = Roll       (Right Stick X)
+# Axis 1 = Pitch      (Right Stick Y)
+# Axis 2 = Throttle   (Left Stick Y)
+# Axis 3 = Yaw        (Left Stick X)
+
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventJoypadMotion:
+		match event.axis:
+			0: axis_0 = event.axis_value
+			1: axis_1 = event.axis_value
+			2: axis_2 = event.axis_value
+			3: axis_3 = event.axis_value
+	if event is InputEventJoypadButton and event.pressed:
+		last_button = event.button_index
+
 	if event is InputEventJoypadMotion and accept_input:
 		var stick := -1
 		var axis := Vector3.ZERO
@@ -142,8 +163,8 @@ func set_roll_stick(value: float) -> void:
 		set_left_stick_horizontal(value)
 
 
-func play_animation(calibration_step: int) -> void:
-	var tween := get_tree().create_tween()
+func play_animation(_calibration_step: int) -> void:
+	var _tween := get_tree().create_tween()
 #	tween.set_loops(0)
 #	match calibration_step:
 #		0:
@@ -238,7 +259,7 @@ func loop_stick_animation() -> void:
 	pass
 
 
-func _on_calibration_step_changed(step: int) -> void:
+func _on_calibration_step_changed(_step: int) -> void:
 #	if step == 1:
 #		tween.tween_all_completed.disconnect(loop_stick_animation)
 #	play_animation(step)

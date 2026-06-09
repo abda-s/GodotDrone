@@ -25,8 +25,19 @@ func _ready() -> void:
 	for i in range(4):
 		if i == 1 or i == 3:
 			prop = "CCW"
-		get_node("Motor%d/Propeller%d/%s" % [i + 1, i + 1, prop]) \
-				.mesh.surface_get_material(0).set_shader_parameter("propeller_color", color)
+		var mesh_instance := get_node("Motor%d/Propeller%d/%s" % [i + 1, i + 1, prop]) as MeshInstance3D
+		var mat := _ensure_shader_material(mesh_instance)
+		mat.set_shader_parameter("propeller_color", color)
+
+
+func _ensure_shader_material(mesh_instance: MeshInstance3D) -> ShaderMaterial:
+	var mat := mesh_instance.mesh.surface_get_material(0)
+	if mat is ShaderMaterial:
+		return mat
+	var shader_mat := ShaderMaterial.new()
+	shader_mat.shader = preload("res://drone/parts/propellers/PropellerShader.tres")
+	mesh_instance.mesh.surface_set_material(0, shader_mat)
+	return shader_mat
 
 
 func _process(delta: float) -> void:
