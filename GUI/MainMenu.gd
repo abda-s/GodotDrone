@@ -1,6 +1,7 @@
 extends Control
 
 
+var packed_map_select_menu := preload("res://GUI/MapSelectMenu.tscn")
 var packed_quad_settings_menu := preload("res://GUI/QuadSettingsMenu.tscn")
 var packed_options_menu := preload("res://GUI/options_menu/OptionsMenu.tscn")
 var packed_help_page := preload("res://GUI/HelpPage.tscn")
@@ -35,7 +36,13 @@ func _ready() -> void:
 
 
 func _on_fly_pressed() -> void:
-	var _discard = get_tree().change_scene_to_file("res://sceneries/Level1.tscn")
+	if packed_map_select_menu.can_instantiate():
+		var map_select_menu := packed_map_select_menu.instantiate()
+		get_parent().add_child(map_select_menu)
+		visible = false
+		await map_select_menu.back
+		map_select_menu.queue_free()
+		visible = true
 
 
 func _on_quad_settings_pressed() -> void:

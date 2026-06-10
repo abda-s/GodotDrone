@@ -25,6 +25,7 @@ var game_mode: int = GameMode.FREE :
 			game_mode = mode
 			game_mode_changed.emit(game_mode)
 var active_track: Track = null
+var selected_map: String = "res://sceneries/Level1.tscn"
 
 
 func _unhandled_input(event: InputEvent) -> void:

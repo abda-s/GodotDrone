@@ -96,8 +96,8 @@ func _on_menu_pressed() -> void:
 	confirm_dialog.cancel_button_text = "Cancel"
 	var _discard = confirm_dialog.confirmed.connect(func():
 		can_resume = true
-		resumed.emit()
-		menu.emit())
+		get_tree().paused = false
+		get_tree().change_scene_to_file("res://GUI/MainMenu.tscn"))
 	_discard = confirm_dialog.canceled.connect(func(): can_resume = true)
 	confirm_dialog.popup_centered()
 

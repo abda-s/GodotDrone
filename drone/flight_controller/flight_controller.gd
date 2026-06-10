@@ -23,7 +23,7 @@ var pid_yaw_i := 5.0
 var pid_yaw_d := 0.0
 
 var debug_geometry_enabled := false
-var telemetry_enabled := true
+var telemetry_enabled := false
 
 var time := 0.0
 var dt := 0.0

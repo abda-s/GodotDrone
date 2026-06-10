@@ -1,0 +1,125 @@
+[gd_scene format=3 uid="uid://bvtvc1p2sxxmt"]
+
+[ext_resource type="Script" uid="uid://lhs1ymi4tg6v" path="res://sceneries/Level.gd" id="1_mce3j"]
+[ext_resource type="PackedScene" uid="uid://cbsls72667u5s" path="res://sceneries/cameras/FollowCamera.tscn" id="2_mdu10"]
+[ext_resource type="PackedScene" uid="uid://cpwlqiq68no60" path="res://sceneries/cameras/FlyaroundCamera.tscn" id="3_ddyac"]
+[ext_resource type="PackedScene" uid="uid://drpyo8j7v14s4" path="res://drone/drones/Drone1.tscn" id="4_w04jn"]
+[ext_resource type="Script" uid="uid://bp208adiyu8j3" path="res://drone/FPVCamera/FPVCamera.gd" id="5_ltykd"]
+[ext_resource type="PackedScene" uid="uid://0bf1vljjkcf2" path="res://Assets/Maps/LosSantos/GTA SA Los Santos Map.glb" id="6_p80p0"]
+[ext_resource type="Script" uid="uid://klj280kfa45" path="res://drone/RadioController.gd" id="7_gonar"]
+[ext_resource type="PackedScene" path="res://tracks/tracks/Track_DoubleGateTraining.tscn" id="8_hu05j"]
+[ext_resource type="PackedScene" path="res://tracks/tracks/Track_FigureEight.tscn" id="9_leqwi"]
+[ext_resource type="PackedScene" uid="uid://bcgfl0s4ppsv6" path="res://tracks/tracks/Track_MultiGP_2018_Regional_Qualifier.tscn" id="10_grv7v"]
+[ext_resource type="PackedScene" uid="uid://bpy5wcppe31o0" path="res://tracks/tracks/Track_MultiGP_2020_Global_Qualifier.tscn" id="11_j0d5d"]
+[ext_resource type="PackedScene" uid="uid://c8f7gpaq0tesn" path="res://tracks/tracks/Track_MultiGP_2018_Regional_Final.tscn" id="12_4e0k1"]
+[ext_resource type="PackedScene" uid="uid://ckemy41jveddk" path="res://tracks/tracks/Track_MultiGP_2019_Global_Qualifier.tscn" id="13_t7oin"]
+[ext_resource type="PackedScene" path="res://tracks/tracks/Track_TorusTunnel.tscn" id="14_em451"]
+[ext_resource type="PackedScene" uid="uid://b2j57x7tra4lm" path="res://tracks/tracks/Track_MultiGP_2021_Global_Qualifier.tscn" id="15_2ahmu"]
+[ext_resource type="PackedScene" uid="uid://dphmx20imcptm" path="res://tracks/tracks/Track_MultiGP_2022_Global_Qualifier.tscn" id="16_gu36g"]
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_730eg"]
+
+[sub_resource type="Sky" id="Sky_8cqmd"]
+sky_material = SubResource("PhysicalSkyMaterial_730eg")
+
+[sub_resource type="Environment" id="Environment_bxx2h"]
+background_mode = 2
+sky = SubResource("Sky_8cqmd")
+ambient_light_source = 3
+reflected_light_source = 2
+tonemap_mode = 2
+sdfgi_use_occlusion = true
+glow_enabled = true
+fog_density = 0.0
+fog_aerial_perspective = 0.5
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_ybxki"]
+auto_exposure_enabled = true
+
+[node name="Level" type="Node3D" unique_id=791297643]
+process_mode = 1
+script = ExtResource("1_mce3j")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1401973558]
+environment = SubResource("Environment_bxx2h")
+camera_attributes = SubResource("CameraAttributesPractical_ybxki")
+
+[node name="Respawn" type="Node3D" parent="." unique_id=1556250330]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=689716166]
+transform = Transform3D(0.860577, 0.207325, -0.465214, 0.509321, -0.350308, 0.786051, 0, -0.913401, -0.407062, 0, 20, 0)
+light_intensity_lux = 21287.13
+shadow_enabled = true
+shadow_bias = 0.0
+directional_shadow_blend_splits = true
+
+[node name="CameraFixed" type="Camera3D" parent="." unique_id=1482047216]
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 8, 20)
+near = 0.1
+far = 1000.0
+
+[node name="FollowCamera" parent="." unique_id=450318578 instance=ExtResource("2_mdu10")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 2)
+near = 0.1
+far = 1000.0
+target = NodePath("../Drone")
+target_distance = 1.0
+target_offset = Vector3(0, 0.2, 0)
+camera_offset = Vector3(0, 0.5, 2)
+speed = 10.0
+
+[node name="FlyaroundCamera" parent="." unique_id=769890120 instance=ExtResource("3_ddyac")]
+process_mode = 3
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 5)
+
+[node name="Drone" parent="." unique_id=687921796 instance=ExtResource("4_w04jn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 311.03293, 9.052709, 207.5675)
+
+[node name="FPVCamera" type="Camera3D" parent="Drone" unique_id=74563502]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, 0.00459784, -0.0626912)
+script = ExtResource("5_ltykd")
+clip_near = 0.006
+
+[node name="Objects" type="Node3D" parent="." unique_id=728838229]
+
+[node name="GTA SA Los Santos Map" parent="Objects" unique_id=2140318854 instance=ExtResource("6_p80p0")]
+
+[node name="RadioController" type="Node" parent="." unique_id=2112148397]
+script = ExtResource("7_gonar")
+target_path = NodePath("../Drone")
+
+[node name="Track_DoubleGateTraining" parent="." unique_id=1616618599 instance=ExtResource("8_hu05j")]
+transform = Transform3D(-0.01083834, 0, 0.9999413, 0, 1, 0, -0.9999413, 0, -0.01083834, 297.27917, -8.079093, 201.83038)
+
+[node name="Track_FigureEight" parent="." unique_id=338863912 instance=ExtResource("9_leqwi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42, 0, 0)
+visible = false
+edit_track = false
+
+[node name="Track_MultiGP_2018_Regional_Qualifier" parent="." unique_id=1561282737 instance=ExtResource("10_grv7v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 80)
+visible = false
+
+[node name="Track_MultiGP_2020_Global_Qualifier" parent="." unique_id=1824404387 instance=ExtResource("11_j0d5d")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 65, 0, 30)
+visible = false
+
+[node name="Track_MultiGP_2018_Regional_Final" parent="." unique_id=1348964105 instance=ExtResource("12_4e0k1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -70, 0, -50)
+visible = false
+
+[node name="Track_MultiGP_2019_Global_Qualifier" parent="." unique_id=110986078 instance=ExtResource("13_t7oin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, -80)
+visible = false
+
+[node name="TorusTunnel" parent="." unique_id=282905820 instance=ExtResource("14_em451")]
+visible = false
+
+[node name="Track_MultiGP_2021_Global_Qualifier" parent="." unique_id=1815743993 instance=ExtResource("15_2ahmu")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -65, 0, 20)
+visible = false
+
+[node name="Track_MultiGP_2022_Global_Qualifier" parent="." unique_id=1835209188 instance=ExtResource("16_gu36g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 0, 0)
+visible = false
+edit_track = false

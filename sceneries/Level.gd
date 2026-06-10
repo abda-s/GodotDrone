@@ -72,7 +72,6 @@ func add_pause_menu() -> void:
 	pause_menu = packed_pause_menu.instantiate()
 	add_child(pause_menu)
 	var _discard = pause_menu.resumed.connect(_on_resume)
-	_discard = pause_menu.menu.connect(_on_return_to_menu)
 	_discard = pause_menu.resumed.connect(func(): pause_menu.queue_free())
 
 
@@ -91,11 +90,6 @@ func _on_resume() -> void:
 		pause_menu.queue_free()
 		await get_tree().process_frame
 		get_tree().paused = false
-
-
-func _on_return_to_menu() -> void:
-	var _discard = get_tree().change_scene_to_file("res://GUI/MainMenu.tscn")
-	queue_free()
 
 
 func _on_game_mode_changed(mode: int) -> void:

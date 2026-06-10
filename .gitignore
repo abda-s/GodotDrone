@@ -6,3 +6,6 @@ export_presets.cfg
 Export/
 
 .mono/
+
+# Large binary files (maps, models, etc.)
+Assets/Maps/
